@@ -26,11 +26,6 @@ dialog.addEventListener("click", e => {
   }
 })
 
-// const myLibrary = [];
-// const harryPotter = new Book("Harry Potter", "JK Rowling", 250, 'true')
-// myLibrary.push(harryPotter)
-// booksEntered()
-
 class Book {
   constructor(title, author, pages, read) {
     this.title = title
@@ -96,11 +91,6 @@ class Library {
 }
 
 let myLibrary = new Library();
-// function readStatus() {
-//   const index = this.getAttribute('data-index');
-//   myLibrary[index].read = !myLibrary[index].read;
-//   booksEntered();
-// }
 
 function addBookToLibrary() {
   let title = document.querySelector('#title').value;
@@ -119,35 +109,3 @@ form.addEventListener('submit', function (e) {
   e.preventDefault();
   addBookToLibrary();
 })
-
-// function booksEntered() {
-//   let libraryTable = document.querySelector('tbody');
-//   libraryTable.innerHTML = '';
-//   for (let i = 0; i < myLibrary.length; i++) {
-//     let book = myLibrary[i];
-//     let bookRow = document.createElement('tr');
-//     bookRow.className = 'book-row'
-//     bookRow.innerHTML = `
-//         <td>${book.title}</td>
-//         <td>${book.author}</td>
-//         <td>${book.pages}</td>
-//         <td><button class="read-status ${book.read ? 'read' : 'not-read'}" data-index="${i}">${book.read ? "Read" : "Not Read Yet"}</button></td>
-//         <td><button class="delete-button" data-index="${i}">Delete</button></td>`;
-//     libraryTable.append(bookRow);
-//   }
-
-//   const readBtns = document.querySelectorAll('.read-status');
-//   readBtns.forEach(button => {
-//     button.addEventListener('click', readStatus)
-//   })
-
-//   const deleteBtns = document.querySelectorAll('.delete-button');
-//   deleteBtns.forEach(button => {
-//     button.addEventListener('click', function () {
-//       const index = this.getAttribute('data-index');
-//       myLibrary.splice(index, 1);
-//       booksEntered();
-//     })
-//   })
-
-// }
