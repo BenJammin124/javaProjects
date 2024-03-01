@@ -26,24 +26,81 @@ dialog.addEventListener("click", e => {
   }
 })
 
-const myLibrary = [];
-const harryPotter = new Book("Harry Potter", "JK Rowling", 250, 'true')
-myLibrary.push(harryPotter)
-booksEntered()
+// const myLibrary = [];
+// const harryPotter = new Book("Harry Potter", "JK Rowling", 250, 'true')
+// myLibrary.push(harryPotter)
+// booksEntered()
 
-function Book(title, author, pages, read) {
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.read = read;
+class Book {
+  constructor(title, author, pages, read) {
+    this.title = title
+    this.author = author
+    this.pages = pages
+    this.read = read
+  }
 }
 
+class Library {
+  constructor() {
+    this.books = []
+  }
 
-function readStatus() {
-  const index = this.getAttribute('data-index');
-  myLibrary[index].read = !myLibrary[index].read;
-  booksEntered();
+  addBook(book) {
+    this.books.push(book);
+  }
+
+  removeBook(index) {
+    this.books.splice(index, 1)
+  }
+
+  readStatus(index) {
+    this.books[index].read = !this.books[index].read;
+  }
+
+  render() {
+    const libraryTable = document.querySelector('tbody');
+
+    libraryTable.innerHTML = '';
+    this.books.forEach((book, index) => {
+      const bookRow = document.createElement('tr');
+      bookRow.className = 'book-row';
+      bookRow.innerHTML = `
+      <td>${book.title}</td>
+        <td>${book.author}</td>
+        <td>${book.pages}</td>
+        <td><button class="read-status ${book.read ? 'read' : 'not-read'}" data-index="${index}">${book.read ? "Read" : "Not Read Yet"}</button></td>
+        <td><button class="delete-button" data-index="${index}">Delete</button></td>`;
+      libraryTable.appendChild(bookRow);
+    })
+
+    const readBtns = document.querySelectorAll('.read-status');
+    readBtns.forEach(button => {
+      button.addEventListener('click', () => {
+        const index = button.getAttribute('data-index');
+        myLibrary.readStatus(index);
+        myLibrary.render()
+      })
+    })
+
+    const deleteBtns = document.querySelectorAll('.delete-button');
+    deleteBtns.forEach(button => {
+      button.addEventListener('click', () => {
+        const index = button.getAttribute('data-index');
+        myLibrary.removeBook(index);
+        myLibrary.render();
+      })
+
+    })
+  }
+
 }
+
+let myLibrary = new Library();
+// function readStatus() {
+//   const index = this.getAttribute('data-index');
+//   myLibrary[index].read = !myLibrary[index].read;
+//   booksEntered();
+// }
 
 function addBookToLibrary() {
   let title = document.querySelector('#title').value;
@@ -52,8 +109,8 @@ function addBookToLibrary() {
   let read = document.querySelector('input[name=read]:checked').value === 'true';
 
   let book = new Book(title, author, pages, read);
-  myLibrary.push(book);
-  booksEntered();
+  myLibrary.addBook(book);
+  myLibrary.render();
   form.reset();
   modal.close();
 }
@@ -63,67 +120,34 @@ form.addEventListener('submit', function (e) {
   addBookToLibrary();
 })
 
-function booksEntered() {
-  let libraryTable = document.querySelector('tbody');
-  libraryTable.innerHTML = '';
-  for (let i = 0; i < myLibrary.length; i++) {
-    let book = myLibrary[i];
-    let bookRow = document.createElement('tr');
-    bookRow.className = 'book-row'
-    bookRow.innerHTML = `
-        <td>${book.title}</td>
-        <td>${book.author}</td>
-        <td>${book.pages}</td>
-        <td><button class="read-status ${book.read ? 'read' : 'not-read'}" data-index="${i}">${book.read ? "Read" : "Not Read Yet"}</button></td>
-        <td><button class="delete-button" data-index="${i}">Delete</button></td>`;
-    libraryTable.append(bookRow);
-  }
-
-  const readBtns = document.querySelectorAll('.read-status');
-  readBtns.forEach(button => {
-    button.addEventListener('click', readStatus)
-  })
-
-  const deleteBtns = document.querySelectorAll('.delete-button');
-  deleteBtns.forEach(button => {
-    button.addEventListener('click', function () {
-      const index = this.getAttribute('data-index');
-      myLibrary.splice(index, 1);
-      booksEntered();
-    })
-  })
-
-}
-
-
-
-// class Book {
-//   constructor(title, author, pages, read) {
-//     const addBook = document.querySelector('.add-btn');
-//     this.title = title
-//     this.author = author
-//     this.pages = pages
-//     this.read = read
-
-//     addBook.addEventListener("click", this.userInput.bind(this))
+// function booksEntered() {
+//   let libraryTable = document.querySelector('tbody');
+//   libraryTable.innerHTML = '';
+//   for (let i = 0; i < myLibrary.length; i++) {
+//     let book = myLibrary[i];
+//     let bookRow = document.createElement('tr');
+//     bookRow.className = 'book-row'
+//     bookRow.innerHTML = `
+//         <td>${book.title}</td>
+//         <td>${book.author}</td>
+//         <td>${book.pages}</td>
+//         <td><button class="read-status ${book.read ? 'read' : 'not-read'}" data-index="${i}">${book.read ? "Read" : "Not Read Yet"}</button></td>
+//         <td><button class="delete-button" data-index="${i}">Delete</button></td>`;
+//     libraryTable.append(bookRow);
 //   }
-//   userInput(e) {
-//     this.title = document.querySelector('#title').value;
-//     this.author = document.querySelector('#author').value
-//     this.pages = document.querySelector('#pages').value
-//     this.read = document.querySelector('input[name=read]:checked').value
 
-//     console.log(this.title, this.author, this.pages, this.read)
-//   }
-//   info() {
-//     return `${this.title}  ${this.author}, ${this.pages}, ${this.read}`
-//   }
+//   const readBtns = document.querySelectorAll('.read-status');
+//   readBtns.forEach(button => {
+//     button.addEventListener('click', readStatus)
+//   })
+
+//   const deleteBtns = document.querySelectorAll('.delete-button');
+//   deleteBtns.forEach(button => {
+//     button.addEventListener('click', function () {
+//       const index = this.getAttribute('data-index');
+//       myLibrary.splice(index, 1);
+//       booksEntered();
+//     })
+//   })
+
 // }
-// const book = new Book();
-
-// function addBookToLibrary(book) {
-//   myLibrary.push(book);
-// }
-
-
-
