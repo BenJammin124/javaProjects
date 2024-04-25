@@ -45,24 +45,6 @@ function readStatus() {
   booksEntered();
 }
 
-function addBookToLibrary() {
-  let title = document.querySelector('#title').value;
-  let author = document.querySelector('#author').value;
-  let pages = document.querySelector('#pages').value;
-  let read = document.querySelector('input[name=read]:checked').value === 'true';
-
-  let book = new Book(title, author, pages, read);
-  myLibrary.push(book);
-  booksEntered();
-  form.reset();
-  modal.close();
-}
-
-form.addEventListener('submit', function (e) {
-  e.preventDefault();
-  addBookToLibrary();
-})
-
 function booksEntered() {
   let libraryTable = document.querySelector('tbody');
   libraryTable.innerHTML = '';
@@ -87,6 +69,8 @@ function booksEntered() {
   const deleteBtns = document.querySelectorAll('.delete-button');
   deleteBtns.forEach(button => {
     button.addEventListener('click', function () {
+      //use event.currentTarget.getAttribute to prevent bubbling,
+      //this.getAttribute works here because there isn't any nested events
       const index = this.getAttribute('data-index');
       myLibrary.splice(index, 1);
       booksEntered();
@@ -94,6 +78,26 @@ function booksEntered() {
   })
 
 }
+
+
+function addBookToLibrary() {
+  let title = document.querySelector('#title').value;
+  let author = document.querySelector('#author').value;
+  let pages = document.querySelector('#pages').value;
+  let read = document.querySelector('input[name=read]:checked').value === 'true';
+
+  let book = new Book(title, author, pages, read);
+  myLibrary.push(book);
+  booksEntered();
+  form.reset();
+  modal.close();
+}
+
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
+  addBookToLibrary();
+})
+
 
 
 
